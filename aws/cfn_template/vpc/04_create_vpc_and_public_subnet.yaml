@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  MyVPC:
+    Description: "Create VPC, internet gateway, public subnet and route table."
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      Tags:
+      - Key: Name
+        Value: MyVPC
+  MyInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: Name
+        Value: igw-of-MyVPC
+  AttachGateWay:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref MyVPC
+      InternetGatewayId: !Ref MyInternetGateway
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    DependsOn: AttachGateWay
+    Properties:
+      VpcId: !Ref MyVPC
+      Tags:
+      - Key: Name
+        Value: MyFirstVPC-PublicRouteTable
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateWay
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref MyInternetGateway
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    DependsOn: AttachGateWay
+    Properties:
+      CidrBlock: 10.0.1.0/24
+      MapPublicIpOnLaunch: 'true'
+      VpcId: !Ref MyVPC
+      Tags:
+      - Key: Name
+        Value: MyVPC-PublicSubnet
+  PublicSubnetAndRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+Outputs:
+  CreatedVPC:
+    Value: !Ref MyVPC
+    Export:
+      Name: !Sub ${AWS::Region}-MyVPC
+  CreatedPublicSunbnet:
+    Value: !Ref PublicSubnet
+    Export:
+      Name: !Sub ${AWS::Region}-PublicSubnet

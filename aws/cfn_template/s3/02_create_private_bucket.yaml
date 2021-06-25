@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  MyBucketName:
+    Description: "create private s3 bucket."
+    Type: String
+    MinLength: 10
+    MaxLength: 255
+    AllowedPattern: ^[a-zA-Z0-9]*$
+Resources:
+  MyS3Bucket:
+    Description: "S3 bucket"
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties:
+      BucketName: !Ref MyBucketName
+  MyS3BucketPolicy:
+    Description: "Policy of bucket restricts as private"
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref MyS3Bucket
+      PolicyDocument:
+        Statement:
+          # any action to object
+          - Action:
+            - 's3:*'
+            Effect: Deny
+            # to anyone
+            Principal: '*'
+            # for my bucket
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref MyBucketName
+                - '/*'
+Outputs:
+  CreatedS3:
+    Value: !Ref MyS3Bucket

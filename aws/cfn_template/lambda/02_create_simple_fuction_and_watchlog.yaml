@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  LambdaExecutionRole:
+    Description: "Create role which enable to execute lambda and save log to CloudWatch."
+    Type:  "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+  MyLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: "Just return status code 200 and body"
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: python3.8
+      FunctionName: simpleFunction
+      Handler: index.simple_handler
+      Code:
+        ZipFile: |
+          import json
+          def simple_handler(event, context):
+            body = 'hello world'
+            return json.dumps({ 'statusCode': 200, 'body': body })
+  MyLogGrouop:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      Description: "Create log group of MyLambda"
+      LogGroupName: !Join ['/', ['/aws/lambda', !Ref MyLambda]]
+      RetentionInDays: 1

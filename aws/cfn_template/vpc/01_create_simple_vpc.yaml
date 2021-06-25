@@ -1,0 +1,7 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  MyVPC:
+    Description: "Only a VPC is created. cidr block is 10.0.0.0/16"
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16

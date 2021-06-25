@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  MyVPC:
+    Description: "Only a VPC is created and output vpc and cidr info after stack craeted."
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+Outputs:
+  CreatedVPC:
+    Value: !Ref MyVPC
+    Export:
+      Name: "created-myvpc"
+  MyVPCCidrBlock:
+    Value: !GetAtt MyVPC.CidrBlock
+    Export:
+      Name: "created-my-cidrblock"
