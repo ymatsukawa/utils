@@ -1,5 +1,10 @@
 import React from 'react'
 
-export const App: React.FC<{}> = () => {
-    <h1>hello world</h1>
+interface AppProps {
+
 }
+
+export const App = ({}: AppProps) =>
+    <>
+      <h1>Hello world</h1>
+    </>
