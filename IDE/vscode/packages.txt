@@ -1,0 +1,13 @@
+castwide.solargraph
+christian-kohler.path-intellisense
+GitHub.github-vscode-theme
+kaiwood.endwise
+misogi.ruby-rubocop
+mosapride.zenkaku
+oderwat.indent-rainbow
+rebornix.ruby
+shardulm94.trailing-spaces
+streetsidesoftware.code-spell-checker
+TabNine.tabnine-vscode
+vscodevim.vim
+wingrunr21.vscode-ruby
