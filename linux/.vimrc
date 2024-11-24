@@ -20,6 +20,27 @@ set fileformat=unix
 set hlsearch
 set incsearch
 set showmode
+set smartcase
+
+set cursorline " highlight cursor line
+set ruler      " show cursor position
+set showcmd
+set wildmenu   " complement command line
+set wildmode=list:longest
+set showmatch
+set hidden
+
+" perfomance
+set ttyfast " faster termianl mode
+
+" open last edited position
+autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+
+" trim last space when save
+autocmd BufWritePre * :%s/\s\+$//e
 
 " indent *******************************************************************
 
@@ -27,11 +48,6 @@ set autoindent
 set smartindent
 set smarttab
 autocmd FileType c,cpp,perl,rb :set cindent
-
-" alias *******************************************************************
-ab pub public
-ab priv private
-ab prot protected
 
 " colors *******************************************************************
 set background=dark
