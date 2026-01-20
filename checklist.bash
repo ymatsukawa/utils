@@ -46,3 +46,4 @@ check_command go
 check_command gvm
 check_command node
 check_command uv
+check_command claude
